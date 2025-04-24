@@ -1,6 +1,7 @@
 package com.example.moviesapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.databinding.ActivityMainBinding
@@ -44,7 +47,6 @@ class MainActivity : ComponentActivity() {
         recyclerView.addItemDecoration(movieMargin)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
- //       viewModel.moviesPagingFlow
 
 //calling with retrofit
  //       viewModel.fetchMoviesWithRetrofit()
@@ -52,8 +54,16 @@ class MainActivity : ComponentActivity() {
 ////calling with Ktor
 //      viewModel.fetchMoviesWithKtor()
 
+//Added padding for different devices
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root){view,insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            view.setPadding(0, statusBarHeight, 0, 0)
+            insets
+        }
+
         viewModel.moviesPagingFlow.observe(this){movies ->
            // recyclerView.adapter = MyAdapter(movies)
+            Log.d("MainActivity", "Submitting paging data to adapter $movies")
             adapter.submitData(lifecycle, movies)
         }
     }

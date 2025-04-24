@@ -1,5 +1,6 @@
 package com.example.moviesapp
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingData
@@ -16,7 +17,10 @@ class MyAdapter: PagingDataAdapter<Movie, MyAdapter.ViewHolder>(COMPARATOR) {
     }
 
     override fun onBindViewHolder(holder: ViewHolder,position: Int) {
+
         val movie = getItem(position)
+        Log.d("MyAdapter", "Binding movie: ${movie?.title}")
+
         movie?.let {
             holder.title.text = movie.title
 
@@ -35,16 +39,13 @@ class MyAdapter: PagingDataAdapter<Movie, MyAdapter.ViewHolder>(COMPARATOR) {
                 .into(holder.image)
         }
 
-    }
 
-//    override fun getItemCount(): Int {
-//        return movies.size
-//    }
+    }
 
 
     class ViewHolder(binding: ItemMovieBinding): RecyclerView.ViewHolder(binding.root){
-        var title  = binding.title
-        var image = binding.movieImage
+        val title  = binding.title
+        val image = binding.movieImage
         val favourite = binding.favouriteMovie
     }
 
