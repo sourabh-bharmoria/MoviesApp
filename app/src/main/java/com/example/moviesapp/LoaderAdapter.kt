@@ -8,6 +8,7 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesapp.databinding.LoaderMovieItemBinding
 
+//Created to show loader when loading movies from other pages
 class LoaderAdapter: LoadStateAdapter<LoaderAdapter.LoaderViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup,loadState: LoadState): LoaderViewHolder {

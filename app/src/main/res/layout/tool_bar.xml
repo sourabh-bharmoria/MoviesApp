@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file is created for making the Toolbar its a demo file not used in the project.-->
+
+<com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolBar"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+<!--    <include layout="@layout/activity_main"/>-->

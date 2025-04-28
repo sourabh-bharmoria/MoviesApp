@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
@@ -65,12 +66,25 @@ dependencies {
 
     implementation(libs.androidx.constraintlayout)
 
+    val fragment_version = "1.8.6"
+
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
+
+    val room_version = "2.7.0"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.room:room-paging:$room_version")
+
     implementation("androidx.cardview:cardview:1.0.0")
 
     val paging_version = "3.3.6"
 
     implementation("androidx.paging:paging-runtime:$paging_version")
 
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation(libs.androidx.recyclerview)
@@ -107,6 +121,8 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.16.0") // If using annotations
 
 
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("com.google.android.material:material:1.11.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

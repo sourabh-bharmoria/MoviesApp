@@ -21,6 +21,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
+//Setting up the ktor http client
 object KtorModule {
 
     @Provides

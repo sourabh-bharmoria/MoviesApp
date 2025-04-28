@@ -1,6 +1,8 @@
 package com.example.moviesapp
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,15 +11,17 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.liveData
+import androidx.room.Room
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.util.valuesOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel // Makes a ViewModel injectable via Hilt. It is used to inject dependencies like a repository.
 class MyViewModel @Inject constructor(
-    private val repository: MyRepository
-): ViewModel() {
+    private val repository: MyRepository,application: Application
+): AndroidViewModel(application) {
 
     val moviesPagingFlow = Pager(
         config = PagingConfig(pageSize = 10),
@@ -27,6 +31,28 @@ class MyViewModel @Inject constructor(
  //2.The pagingSource where the data is coming from
     //The cachedIn() operator makes the data stream shareable and caches the loaded data with the provided
     //viewModelScope.
+
+//Added for database
+
+    val movies: LiveData<List<Movie>> = repository.dao.getFavMovies()
+
+
+    fun insertMovie(movie: Movie){
+        viewModelScope.launch {
+            repository.dao.insert(movie)
+        }
+    }
+
+    fun deleteMovie(movie: Movie){
+        viewModelScope.launch {
+            repository.dao.delete(movie)
+        }
+    }
+
+    suspend fun isMovieFavourite(id: Int): Boolean {
+        //This method should return boolean
+        return repository.isMovieFavourite(id)
+    }
 
 }
 //
