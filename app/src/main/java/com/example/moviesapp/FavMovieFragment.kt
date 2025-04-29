@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FavMovieFragment : Fragment() {
-
+//Two binding variable are used to avoid memory leaks when using ViewBinding inside Fragments.
     private var _binding: FragmentFavMovieBinding? = null
     private val binding get() = _binding!!
 
@@ -30,13 +30,13 @@ class FavMovieFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        favAdapter = FavMovieAdapter()
-//        binding.favMovieContainer.adapter = favAdapter
+        favAdapter = FavMovieAdapter(viewModel)
+        binding.favMovieContainer.adapter = favAdapter
         binding.favMovieContainer.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.movies.observe(viewLifecycleOwner) { favList ->
-            favAdapter = FavMovieAdapter(favList,viewModel)
-            binding.favMovieContainer.adapter = favAdapter
+
+            favAdapter.submitList(favList)
         }
 
 //Handling back button functionality when pressed back intent takes us back to the mainActivity
@@ -50,7 +50,6 @@ class FavMovieFragment : Fragment() {
         })
 
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
