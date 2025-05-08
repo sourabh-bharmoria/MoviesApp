@@ -18,7 +18,7 @@ class FavMovieAdapter(private val viewModel: MyViewModel):ListAdapter<Movie,FavM
 //    private val movies = mutableListOf<Movie>()
 
 
-    private lateinit var binding: ItemMovieBinding
+//    private lateinit var binding: ItemMovieBinding
 
     override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): FavMovieViewHolder {
         val binding = ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)

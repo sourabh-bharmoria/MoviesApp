@@ -124,6 +124,11 @@ dependencies {
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("com.google.android.material:material:1.11.0")
 
+    val work_version = "2.10.1"
+
+    implementation("androidx.work:work-runtime-ktx:$work_version")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,5 +1,10 @@
 package com.example.moviesapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,9 +14,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        createNotificationChannel(this)
+
         setSupportActionBar(binding.toolBar)
 
         val drawerLayout = binding.drawerLayout
@@ -40,6 +49,13 @@ class MainActivity : AppCompatActivity() {
         val navigationView = binding.navigationView
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.home ->{
+                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    binding.recyclerView.visibility = View.VISIBLE
+                    Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+                    true
+                }
+
                 R.id.favMovie -> {
                     // Handle navigation to Favourite Movies
                     val fragment = FavMovieFragment()
@@ -52,9 +68,16 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.visibility = View.GONE
                     true
                 }
-                R.id.home -> {
+                R.id.notification -> {
                     // Handle navigation to Home
-                    Toast.makeText(this,"Home", Toast.LENGTH_SHORT).show()
+                    val fragment1 = NotificationFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer,fragment1)
+                        .addToBackStack(null)
+                        .commit()
+
+                    Toast.makeText(this,"Notifications Scheduled", Toast.LENGTH_SHORT).show()
+                    binding.recyclerView.visibility = View.GONE
                     true
                 }
                 R.id.setting -> {
@@ -112,5 +135,19 @@ class MainActivity : AppCompatActivity() {
             Timber.d("Submitting paging data to adapter $movies")
             adapter.submitData(lifecycle, movies)
         }
+
+
+    }
+}
+
+//Creating NotificationChannel for Notifications
+private fun createNotificationChannel(context: Context){
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        val channel = NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT).apply {
+            description = "Notification Channel Description"
+        }
+
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
     }
 }
