@@ -118,21 +118,21 @@ class NotificationFragment : Fragment() {
         }
 
 //To avoid the focus from the EditText field if the user taps somewhere else on the screen and also hide the keyboard in that case
-//        binding.rootLayout.setOnTouchListener { v, event ->
-//            if (event.action == MotionEvent.ACTION_DOWN) {
-//                v.clearFocus()  // Clear focus from any currently focused view like EditText fields
-//                hideKeyboard()  // Hide keyboard when user taps somewhere else
-//                v.performClick() // Ensure proper click handling for accessibility
-//            }
-//            false
-//        }
+        binding.rootLayout.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                v.clearFocus()  // Clear focus from any currently focused view like EditText fields
+                hideKeyboard()  // Hide keyboard when user taps somewhere else
+                v.performClick() // Ensure proper click handling for accessibility
+            }
+            false
+        }
 
     }
 
-//    private fun hideKeyboard() {
-//        val inputMethodManager = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
-//        inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-//    }
+    private fun hideKeyboard() {
+        val inputMethodManager = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
 
 
     private fun scheduleNotification(){
