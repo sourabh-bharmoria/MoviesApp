@@ -80,8 +80,15 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.visibility = View.GONE
                     true
                 }
-                R.id.setting -> {
-                    Toast.makeText(this,"Setting", Toast.LENGTH_SHORT).show()
+                R.id.location -> {
+                    val fragment = LocationFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer,fragment)
+                        .addToBackStack(null)
+                        .commit()
+
+                    Toast.makeText(this,"Location", Toast.LENGTH_SHORT).show()
+                    binding.recyclerView.visibility = View.GONE
                     true
                 }
                 else -> false

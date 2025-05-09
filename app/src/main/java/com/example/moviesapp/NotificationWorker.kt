@@ -20,6 +20,13 @@ class NotificationWorker(appContext: Context,workerParams: WorkerParameters): Wo
         Timber.d("Worker is called")
         val title = inputData.getString("title") ?: "No title"
         val message = inputData.getString("message") ?: "No message"
+
+  //For Location
+        val latitude = inputData.getDouble("latitude",0.0)
+        val longitude = inputData.getDouble("longitude",0.0)
+
+        val location = "$latitude $longitude"
+        showLocationNotification(applicationContext,location)
 //        val imageUriString = inputData.getString("image")
 //        Timber.d(imageUriString)
 //        val imageUri = Uri.parse(imageUriString)
@@ -76,5 +83,18 @@ class NotificationWorker(appContext: Context,workerParams: WorkerParameters): Wo
         notificationManager.notify(System.currentTimeMillis().toInt(),notification)
 
 
+    }
+
+  //Fun to show Location Notification
+    private fun showLocationNotification(context: Context,location: String){
+        val notification = NotificationCompat.Builder(context,"channel_id")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Your Location")
+            .setContentText(location)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(1001,notification)
     }
 }

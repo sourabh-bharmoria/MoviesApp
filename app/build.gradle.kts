@@ -128,6 +128,9 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

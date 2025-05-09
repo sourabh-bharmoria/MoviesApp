@@ -20,8 +20,8 @@
         android:contentDescription="Home"/>
 
     <item
-        android:id="@+id/setting"
-        android:title="Settings"
-        android:icon="@drawable/baseline_build_24"
-        android:contentDescription="Settings"/>
+        android:id="@+id/location"
+        android:title="Location"
+        android:icon="@drawable/baseline_location_on_24"
+        android:contentDescription="Shows Location"/>
 </menu>
