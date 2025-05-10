@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        createNotificationChannel(this)
-
         setSupportActionBar(binding.toolBar)
 
         val drawerLayout = binding.drawerLayout
@@ -147,14 +145,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-//Creating NotificationChannel for Notifications
-private fun createNotificationChannel(context: Context){
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-        val channel = NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT).apply {
-            description = "Notification Channel Description"
-        }
-
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel)
-    }
-}

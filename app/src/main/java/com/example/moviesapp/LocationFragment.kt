@@ -15,12 +15,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Snackbar
 import androidx.core.content.ContextCompat
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.moviesapp.databinding.FragmentLocationBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -31,9 +31,6 @@ class LocationFragment : Fragment() {
 
     private  var _binding: FragmentLocationBinding? = null
     private  val binding get() = _binding!!
-
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
 
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()){isGranted: Boolean->
@@ -62,7 +59,7 @@ class LocationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         binding.mySwitch.setOnCheckedChangeListener {_,isChecked ->
             if(isChecked){ //Switch is on
@@ -101,38 +98,23 @@ class LocationFragment : Fragment() {
 
     private fun fetchAndScheduleNotification(){
         if(ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            fusedLocationClient.lastLocation.addOnSuccessListener {location->
-                if(location != null){
-                    val latitude = location.latitude
-                    val longitude = location.longitude
 
-                    Timber.d("Location in Fragment: $latitude $longitude")
+        //Setting up the work request
+        val workRequest = PeriodicWorkRequestBuilder<LocationWorker>(15, TimeUnit.MINUTES).build()
 
-                    val inputData = workDataOf(
-                        "latitude" to latitude,
-                        "longitude" to longitude
-                    )
+        WorkManager
+          .getInstance(requireContext())
+          .enqueueUniquePeriodicWork(
+               "LocationWork",
+               ExistingPeriodicWorkPolicy.UPDATE,
+                workRequest
+          )
 
-                    Timber.d("$inputData")
-
-//Setting up the work request
-                    val workRequest = PeriodicWorkRequestBuilder<LocationWorker>(15, TimeUnit.MINUTES)
-                        .setInputData(inputData)
-                        .build()
-
-                    WorkManager
-                        .getInstance(requireContext())
-                        .enqueueUniquePeriodicWork(
-                            "LocationWork",
-                            ExistingPeriodicWorkPolicy.UPDATE,
-                            workRequest
-                        )
-
-                }else{
-                    Toast.makeText(requireContext(),"Error fetching Location",Toast.LENGTH_SHORT).show()
-                }
-            }
+        }else{
+             Toast.makeText(requireContext(),"Error fetching Location",Toast.LENGTH_SHORT).show()
         }
+
+
     }
 
     override fun onDestroyView() {
