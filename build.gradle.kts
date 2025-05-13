@@ -6,6 +6,13 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
     kotlin("plugin.serialization") version "1.7.20"
     id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin) apply false
+}
+
+buildscript {
+    dependencies {
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+    }
 }
 
 

@@ -89,6 +89,9 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.visibility = View.GONE
                     true
                 }
+                R.id.googleMap -> {
+
+                }
                 else -> false
             }
 
@@ -142,6 +145,12 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+//When the app is resumed again this fun runs which checks the language setting selected by the user and based on that api is called
+//and data is retrieved
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshMovieIfLanguageChanges()
     }
 }
 

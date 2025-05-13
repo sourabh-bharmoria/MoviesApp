@@ -2,19 +2,23 @@ package com.example.moviesapp
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import androidx.room.Room
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.util.valuesOf
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.Language
 import java.util.Locale
 import javax.inject.Inject
 
@@ -24,9 +28,21 @@ class MyViewModel @Inject constructor(
     private val repository: MyRepository,application: Application
 ): AndroidViewModel(application) {
 
-    private val languageCode = Locale.getDefault().language
+    private var currentLanguageCode = Locale.getDefault().language
 
-    val moviesPagingFlow = Pager(
+//This code changes the api movie title based on the system language(hindi in this case) when changed in settings
+private val _pagerLiveData = MutableLiveData(createPager(currentLanguageCode))
+    val moviesPagingFlow: LiveData<PagingData<Movie>> = _pagerLiveData.switchMap { it }
+
+    fun refreshMovieIfLanguageChanges() {
+        val newLanguageCode = Locale.getDefault().language
+        if (newLanguageCode != currentLanguageCode) {
+            currentLanguageCode = newLanguageCode
+            _pagerLiveData.value = createPager(currentLanguageCode)
+        }
+    }
+
+    private fun createPager(languageCode: String) =  Pager(
         config = PagingConfig(pageSize = 10),
         pagingSourceFactory = { MoviePagingSource(repository, BuildConfig.TMDB_API_KEY, languageCode) }
     ).liveData.cachedIn(viewModelScope)

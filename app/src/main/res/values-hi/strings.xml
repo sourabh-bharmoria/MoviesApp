@@ -23,4 +23,5 @@
     <string name="FavouriteMovies">पसंदीदा फ़िल्में</string>
     <string name="Notifications">सूचनाएं</string>
     <string name="Location">स्थान</string>
+    <string name="GoogleMap">गूगल मानचित्र</string>
 </resources>

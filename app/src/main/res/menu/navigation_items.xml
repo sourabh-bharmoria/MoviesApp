@@ -24,4 +24,10 @@
         android:title="@string/Location"
         android:icon="@drawable/baseline_location_on_24"
         android:contentDescription="@string/Location"/>
+
+    <item
+        android:id="@+id/googleMap"
+        android:title="@string/GoogleMap"
+        android:icon="@drawable/baseline_location_searching_24"
+        android:contentDescription="@string/GoogleMap"/>
 </menu>

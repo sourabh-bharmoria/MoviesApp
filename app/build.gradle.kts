@@ -8,6 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 }
 
@@ -86,6 +87,7 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.appcompat)
 
     val fragment_version = "1.8.6"
 

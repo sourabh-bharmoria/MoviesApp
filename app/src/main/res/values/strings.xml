@@ -23,6 +23,8 @@
     <string name="FavouriteMovies">Favourite Movies</string>
     <string name="Notifications">Notifications</string>
     <string name="Location">Location</string>
+    <string name="GoogleMap">Google Map</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 
 </resources>
