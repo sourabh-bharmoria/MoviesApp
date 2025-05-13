@@ -51,6 +51,27 @@ android {
         buildConfig = true
 
     }
+
+    flavorDimensions += "version" //Grouping for flavors
+
+    productFlavors {
+        create("dev"){
+            dimension = "version"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "MyApp dev")
+        }
+        create("staging") { //the flavor itself is the name
+            dimension = "version"
+            applicationIdSuffix = ".staging"
+            resValue("string", "app_name", "MyApp Staging")
+        }
+        create("prod"){
+            dimension = "version"
+            resValue("string", "app_name", "MyApp prod")
+
+        }
+    }
+
 }
 
 dependencies {
@@ -130,6 +151,9 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
+
+    // Maps SDK for Android
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 
 
     testImplementation(libs.junit)
