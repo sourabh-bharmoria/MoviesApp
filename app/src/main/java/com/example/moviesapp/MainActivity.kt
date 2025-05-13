@@ -90,7 +90,15 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.googleMap -> {
+                    val fragment = MapsFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer,fragment)
+                        .addToBackStack(null)
+                        .commit()
 
+                    Toast.makeText(this,"Map", Toast.LENGTH_SHORT).show()
+                    binding.recyclerView.visibility = View.GONE
+                    true
                 }
                 else -> false
             }

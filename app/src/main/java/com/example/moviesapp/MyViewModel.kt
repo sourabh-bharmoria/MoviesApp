@@ -31,8 +31,11 @@ class MyViewModel @Inject constructor(
     private var currentLanguageCode = Locale.getDefault().language
 
 //This code changes the api movie title based on the system language(hindi in this case) when changed in settings
-private val _pagerLiveData = MutableLiveData(createPager(currentLanguageCode))
-    val moviesPagingFlow: LiveData<PagingData<Movie>> = _pagerLiveData.switchMap { it }
+    private val _pagerLiveData = MutableLiveData(createPager(currentLanguageCode))//it hold a liveStream of movies based on the current language.
+
+    //whenever _pagerLiveData gives us a new Movie stream , switch to it and use it as the latest movie data.
+
+    val moviesPagingFlow: LiveData<PagingData<Movie>> = _pagerLiveData.switchMap { it }//switchMap is used to switch between the old and new LiveData
 
     fun refreshMovieIfLanguageChanges() {
         val newLanguageCode = Locale.getDefault().language

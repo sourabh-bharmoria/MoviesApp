@@ -75,6 +75,14 @@ android {
 
 }
 
+secrets {
+
+    propertiesFileName = "secret.properties"
+
+    defaultPropertiesFileName = "local.defaults.properties"
+}
+
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
