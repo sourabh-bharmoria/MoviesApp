@@ -15,6 +15,7 @@ import androidx.room.Room
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.util.valuesOf
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -23,9 +24,11 @@ class MyViewModel @Inject constructor(
     private val repository: MyRepository,application: Application
 ): AndroidViewModel(application) {
 
+    private val languageCode = Locale.getDefault().language
+
     val moviesPagingFlow = Pager(
         config = PagingConfig(pageSize = 10),
-        pagingSourceFactory = { MoviePagingSource(repository, BuildConfig.TMDB_API_KEY) }
+        pagingSourceFactory = { MoviePagingSource(repository, BuildConfig.TMDB_API_KEY, languageCode) }
     ).liveData.cachedIn(viewModelScope)
  //The pager object takes 2 parameters 1.config which specify the pageSize and maintained items
  //2.The pagingSource where the data is coming from

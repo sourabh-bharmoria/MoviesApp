@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="start"
-            android:text="Title"
+            android:text="@string/ItemTitle"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent"

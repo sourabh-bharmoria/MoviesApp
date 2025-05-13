@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">मूवीज़ऐप</string>
+    <string name="OpenDrawer">नेविगेशन ड्रावर खोलें</string>
+    <string name="CloseDrawer">नेविगेशन ड्रावर बंद करें</string>
+    <!-- TODO: इस प्लेसहोल्डर टेक्स्ट को हटाएं या बदलें -->
+    <string name="hello_blank_fragment">नमस्ते, ब्लैंक फ्रैगमेंट</string>
+    <string name="ShowLocationPermission">लोकेशन दिखाएं</string>
+    <string name="NotificationTitle">शीर्षक दर्ज करें</string>
+    <string name="NotificationMsg">संदेश दर्ज करें</string>
+    <string name="NotificationImage">छवि जोड़ने के लिए टैप करें</string>
+    <string name="NotificationBtn">सूचना शेड्यूल करें</string>
+    <string name="ItemTitle">शीर्षक</string>
+    <string name="ItemNotificationTitle">शीर्षक</string>
+    <string name="ItemNotificationTime">समय</string>
+    <string name="ItemNotificationButton">हटाएं</string>
+
+    <string name="NavHeaderImage">हेडर छवि</string>
+    <string name="NavHeaderProfile">सौरभ भर्मोरिया</string>
+    <string name="NavHeaderEmail">sourab@gmail.com</string>
+
+    <string name="MenuHome">होम</string>
+    <string name="FavouriteMovies">पसंदीदा फ़िल्में</string>
+    <string name="Notifications">सूचनाएं</string>
+    <string name="Location">स्थान</string>
+</resources>

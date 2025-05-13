@@ -62,6 +62,7 @@ class LocationWorker(appContext: Context,workerParams: WorkerParameters): Worker
             .setContentTitle("Location Notification")
             .setContentText(location)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()
 
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

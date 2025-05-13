@@ -13,7 +13,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Enter title"
+        android:hint="@string/NotificationTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Enter Message"
+        android:hint="@string/NotificationMsg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -65,7 +65,7 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_add_24"
-        android:contentDescription="Tap to add an Image"
+        android:contentDescription="@string/NotificationImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time"/>
@@ -74,7 +74,7 @@
         android:id="@+id/scheduleNotibutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Schedule Notification"
+        android:text="@string/NotificationBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image"/>

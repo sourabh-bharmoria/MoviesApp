@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/textViewTitle"
-            android:text="Title"
+            android:text="@string/ItemNotificationTitle"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/textViewTime"
-            android:text="Time"
+            android:text="@string/ItemNotificationTime"
             android:textSize="14sp"
             android:layout_marginTop="4dp"
             android:layout_width="wrap_content"
@@ -34,6 +34,6 @@
         android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="@string/ItemNotificationButton"
         android:background="#F21F1F"/>
 </LinearLayout>

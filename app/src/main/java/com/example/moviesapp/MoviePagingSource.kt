@@ -6,7 +6,7 @@ import androidx.paging.PagingState
 import timber.log.Timber
 import javax.inject.Inject
 
-class MoviePagingSource @Inject constructor(private val repository: MyRepository,private val apiKey: String): PagingSource<Int, Movie>() {
+class MoviePagingSource @Inject constructor(private val repository: MyRepository,private val apiKey: String, private val languageCode: String): PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         val page = params.key ?: 1
@@ -16,10 +16,15 @@ class MoviePagingSource @Inject constructor(private val repository: MyRepository
             Timber.d("API key: $apiKey")
 
             Timber.d("Calling API with page: $page")
-            val response = repository.getMovieList(apiKey, page)
+            val response = repository.getMovieList(apiKey, page, languageCode)
             Timber.d("response code: ${response.code()}")
             Timber.d("response body: ${response.body()}")
+//For fetching movies with retrofit
             val movies = response.body()?.results ?: emptyList()
+
+//For fetching movies with ktor
+   //        val movies = response.results ?: emptyList()
+
             LoadResult.Page(
                 data = movies,
                 prevKey = if (page == 1) null else page - 1,

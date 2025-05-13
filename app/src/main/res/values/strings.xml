@@ -4,5 +4,25 @@
     <string name="CloseDrawer">Close Navigation drawer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ShowLocationPermission">Show Location</string>
+    <string name="NotificationTitle">Enter Title</string>
+    <string name="NotificationMsg">Enter Message</string>
+    <string name="NotificationImage">Tap to Add an Image</string>
+    <string name="NotificationBtn">Schedule Notification</string>
+    <string name="ItemTitle">Title</string>
+    <string name="ItemNotificationTitle">Title</string>
+    <string name="ItemNotificationTime">Time</string>
+    <string name="ItemNotificationButton">Delete</string>
+
+    <string name="NavHeaderImage">HeaderImage</string>
+    <string name="NavHeaderProfile">Sourabh Bharmoria</string>
+    <string name="NavHeaderEmail">sourab@gmail.com</string>
+
+
+    <string name="MenuHome">Home</string>
+    <string name="FavouriteMovies">Favourite Movies</string>
+    <string name="Notifications">Notifications</string>
+    <string name="Location">Location</string>
+
 
 </resources>

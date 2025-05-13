@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="220dp"
     android:orientation="vertical"
@@ -11,13 +12,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_profile_circle_24"
-        android:tint="#3E52BD"
-        android:contentDescription="HeaderImage"/>
+        android:contentDescription="@string/NavHeaderProfile"
+        app:tint="#3E52BD" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sourabh Bharmoria"
+        android:text="@string/NavHeaderProfile"
         android:textColor="?attr/colorOnSurface"
         android:textSize="24sp"
         android:textStyle="bold"/>
@@ -25,7 +26,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sourab@gmail.com"
+        android:text="@string/NavHeaderEmail"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="normal"/>

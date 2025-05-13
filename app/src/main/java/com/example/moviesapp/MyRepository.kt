@@ -8,13 +8,13 @@ import javax.inject.Inject
 
 class MyRepository @Inject constructor(private val api: MovieApiService,private val ktorApiService: KtorApiService, val dao: MovieDao){
 
-    suspend fun getMovieList(apiKey: String,page: Int) : Response<MovieResponse>{
+    suspend fun getMovieList(apiKey: String,page: Int,language: String) : Response<MovieResponse>{
         Timber.d("Repository $apiKey")
-        return api.getMovies(apiKey,page)
+        return api.getMovies(apiKey,page,language)
     }
 
-    suspend fun getMoviesWithKtor(apiKey: String,page:Int) : MovieResponse {
-        return ktorApiService.getMoviesktor(apiKey, page)
+    suspend fun getMoviesWithKtor(apiKey: String,page:Int,language: String) : MovieResponse {
+        return ktorApiService.getMoviesktor(apiKey, page, language)
     }
 
 //Functions added for database and favourite movie functionality

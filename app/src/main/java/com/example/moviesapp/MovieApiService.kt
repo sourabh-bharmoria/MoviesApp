@@ -11,7 +11,8 @@ interface MovieApiService {
     @GET("movie/popular")
    suspend fun getMovies(
         @Query("api_key") apiKey: String,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
+        @Query("language") language: String
    ) : Response<MovieResponse>
 
 }
