@@ -13,7 +13,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.heatmaps.HeatmapTileProvider
 import timber.log.Timber
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
@@ -76,7 +78,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         clusterManager.addItem(MyItem(-34.0, 151.0,"Marker in Sydney","$sydney"))
         clusterManager.addItem(MyItem(28.6139, 77.2090,"Marker in delhi","$delhi"))
 
-//Added locations near delhi to check the clustering    
+//Added locations near delhi to check the clustering
         clusterManager.addItem(MyItem(28.6315, 77.2167, "Connaught Place", "Popular commercial hub"))
         clusterManager.addItem(MyItem(28.6129, 77.2295, "India Gate", "War memorial"))
         clusterManager.addItem(MyItem(28.5244, 77.1855, "Qutub Minar", "Historical monument"))
@@ -145,7 +147,33 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
+
+//Adding 1 HeatMap on the map
+        addHeatMap()
     }
+
+    private fun addHeatMap(){
+        val points = mutableListOf<LatLng>()
+        //Beijing lat and lang are used
+        val baseLat = 39.9042
+        val baseLng = 116.4074
+
+        // Creating many points near Beijing to see the HeatMap
+        for (i in 0 until 100) {
+            val lat = baseLat + Math.random() * 0.01
+            val lng = baseLng + Math.random() * 0.01
+            points.add(LatLng(lat, lng))
+        }
+
+        val heatMapProvider = HeatmapTileProvider.Builder()
+            .data(points)//This takes values in list format and can take multiple values
+            .radius(20)
+            .build()
+
+        mMap.addTileOverlay(TileOverlayOptions().tileProvider(heatMapProvider))
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
