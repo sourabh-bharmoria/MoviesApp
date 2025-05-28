@@ -1,23 +1,47 @@
 package com.example.moviesapp
 
+import android.Manifest
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.moviesapp.databinding.FragmentMapsBinding
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.heatmaps.HeatmapTileProvider
+import com.example.moviesapp.LocationPermissionUtil
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
+import androidx.core.graphics.toColorInt
+import com.google.android.gms.maps.model.CameraPosition
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentMapsBinding? = null
@@ -25,7 +49,37 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var clusterManager: ClusterManager<MyItem>
 
+//    private var userMarker: Marker? = null
+    private var locationCircle: Circle? = null
+
+    private lateinit var locationCallback: LocationCallback
+    private var fusedLocationClient: FusedLocationProviderClient? = null
+
     private lateinit var mMap: GoogleMap
+
+
+    // Register permission launcher using ActivityResult API
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions.entries.all { it.value }
+        if (granted) {
+            startLocationUpdates()
+//            enableMyLocationOnMap()
+        } else {
+            val rootView = requireActivity().findViewById<View>(android.R.id.content)
+
+            val snackBar = Snackbar.make(rootView,"Location Permission Denied", Snackbar.LENGTH_INDEFINITE)
+
+            snackBar.setAction("settings"){
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.fromParts("package", requireContext().packageName, null)
+                startActivity(intent)
+
+            }
+            snackBar.show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +95,26 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map_fragment_container) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        //Initializing FusedLocation Client
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                val location = locationResult.lastLocation ?: return
+
+                val latLng = LatLng(location.latitude, location.longitude)
+
+
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17f))
+
+                val updateInterval = 4000L
+
+                updateCircle(latLng, updateInterval)
+            }
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -92,8 +166,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
 
-
-
         clusterManager.addItem(MyItem(19.0760, 72.8777,"Marker in Mumbai","$mumbai"))
         clusterManager.addItem(MyItem(22.5726, 88.3639,"Marker in Kolkata","$kolkata"))
         clusterManager.addItem(MyItem(31.1048, 77.1734,"Marker in Shimla","$shimla"))
@@ -117,39 +189,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         clusterManager.cluster()
 
-
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").snippet("$sydney"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(delhi).title("Marker in delhi").snippet("$delhi"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(mumbai).title("Marker in Mumbai").snippet("$mumbai"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(kolkata).title("Marker in Kolkata").snippet("$kolkata"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(shimla).title("Marker in Shimla").snippet("$shimla"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(melbourne).title("Marker in Melbourne").snippet("$melbourne"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(newYork).title("Marker in New York").snippet("$newYork"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(sanFrancisco).title("Marker in San Francisco").snippet("$sanFrancisco"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(london).title("Marker in London").snippet("$london"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(paris).title("Marker in Paris").snippet("$paris"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(chandigarh).title("Marker in Chandigarh").snippet("$chandigarh"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(chennai).title("Marker in Chennai").snippet("$chennai"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(istanbul).title("Marker in Istanbul").snippet("$istanbul"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(berlin).title("Marker in Berlin").snippet("$berlin"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow").snippet("$moscow"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(cairo).title("Marker in Cairo").snippet("$cairo"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(capeTown).title("Marker in Cape Town").snippet("$capeTown"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(rio).title("Marker in Rio de janeiro").snippet("$rio"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(barcelona).title("Marker in Barcelona").snippet("$barcelona"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(tokyo).title("Marker in Tokyo").snippet("$tokyo"))?.showInfoWindow()
-//        mMap.addMarker(MarkerOptions().position(toronto).title("Marker in Toronto").snippet("$toronto"))?.showInfoWindow()
-
-//Changing the Marker color
-//        val option = MarkerOptions().position(dubai).title("Marker in Dubai")
-//        option.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-//        mMap.addMarker(option)
-
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
 
 //Adding 1 HeatMap on the map
         addHeatMap()
+
+//this is added for checking location permission
+        if (LocationPermissionUtil.hasLocationPermission(requireContext())) {
+            startLocationUpdates()
+//            enableMyLocationOnMap()
+        } else {
+           requestPermissionLauncher.launch(LocationPermissionUtil.REQUIRED_PERMISSIONS)
+        }
     }
 
     private fun addHeatMap(){
@@ -173,7 +224,86 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mMap.addTileOverlay(TileOverlayOptions().tileProvider(heatMapProvider))
     }
 
+    private fun updateCircle(newLatLng: LatLng, duration: Long){
+        //If the location circle doesn't exist it creates the circle
+        if(locationCircle == null){
+            locationCircle = mMap.addCircle(
+                CircleOptions()
+                    .center(newLatLng)
+                    .radius(10.0)
+                    .strokeColor(Color.WHITE)
+                    .fillColor("#4285F4".toColorInt())
+                    .zIndex(10f)
+            )
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLatLng,17f))
+        }else {
+            //if the location circle exists it animates the circle to new position
+            animateCircleMovement(locationCircle!!, newLatLng, duration)
+            animateCameraMovement(newLatLng, duration)
 
+        }
+    }
+
+    private fun animateCircleMovement(circle: Circle, finalPosition: LatLng, duration: Long) {
+        val startLatLng = circle.center
+        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+        valueAnimator.duration = duration // animation duration should be equal to the time needed for location update
+        valueAnimator.interpolator = LinearInterpolator() //LinearInterpolator is used to ensure the animation progress is at a constant speed
+
+        valueAnimator.addUpdateListener { animation ->
+            val fraction = animation.animatedFraction //fraction refers to the progress of animation between 0.0 to 1.0
+            val lat = (finalPosition.latitude - startLatLng.latitude) * fraction + startLatLng.latitude
+            val lng = (finalPosition.longitude - startLatLng.longitude) * fraction + startLatLng.longitude
+            circle.center = LatLng(lat, lng)
+        }
+
+        valueAnimator.start() //start the animation loop
+    }
+
+    private fun animateCameraMovement(targetLatLng: LatLng, duration: Long) {
+        val currentCameraPosition = mMap.cameraPosition
+
+        val cameraPosition = CameraPosition.Builder(currentCameraPosition)
+            .target(targetLatLng)  // Center to new location
+            .zoom(currentCameraPosition.zoom) // Keep same zoom
+            .bearing(currentCameraPosition.bearing) // Keep same rotation
+            .tilt(currentCameraPosition.tilt) // Keep same tilt
+            .build()
+
+        mMap.animateCamera(     //Animate from the current position to new camera position.
+            CameraUpdateFactory.newCameraPosition(cameraPosition),//Uses cameraUpdateFactory to update
+            duration.toInt(),  // animation duration of camera same as for the circle icon movement
+            null
+        )
+    }
+
+
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY, 4000L
+        ).build()
+
+        // Permission already checked before calling this function
+        fusedLocationClient?.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+
+//    @SuppressLint("MissingPermission")
+//    private fun enableMyLocationOnMap() {
+//        if (::mMap.isInitialized) {
+//            mMap.isMyLocationEnabled = true
+//        }
+//    }
+
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient?.removeLocationUpdates(locationCallback)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

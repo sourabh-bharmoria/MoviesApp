@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.visibility = View.GONE
                     true
                 }
+
                 R.id.notification -> {
                     // Handle navigation to Home
                     val fragment1 = NotificationFragment()
@@ -78,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.visibility = View.GONE
                     true
                 }
+
                 R.id.location -> {
                     val fragment = LocationFragment()
                     supportFragmentManager.beginTransaction()
@@ -89,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.visibility = View.GONE
                     true
                 }
+
                 R.id.googleMap -> {
                     val fragment = MapsFragment()
                     supportFragmentManager.beginTransaction()
@@ -108,15 +112,25 @@ class MainActivity : AppCompatActivity() {
              true
         }
 
-       onBackPressedDispatcher.addCallback(this){
-           if(drawerLayout.isOpen){
-               drawerLayout.closeDrawer(GravityCompat.START)
-           }else{
-               onBackPressedDispatcher.onBackPressed()
+//       onBackPressedDispatcher.addCallback(this){
+//           if(drawerLayout.isOpen){
+//               drawerLayout.closeDrawer(GravityCompat.START)
+//           }else{
+//               onBackPressedDispatcher.onBackPressed()
+//           }
+//       }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+           override fun handleOnBackPressed(){
+               val fm = supportFragmentManager
+               if(fm.backStackEntryCount > 0){
+                   fm.popBackStack()// Remove the fragments from the backstack and navigate to the mainActivity
+                   binding.recyclerView.visibility = View.VISIBLE //Making the content(recyclerView) visible again
+               }else{
+                   finish()
+               }
            }
-       }
-
-
+        })
 
         val recyclerView = binding.recyclerView
 
